@@ -26,7 +26,9 @@
  *
  */
 function getComposition(f,g) {
-    throw new Error('Not implemented');
+    return function(...args) {
+        return f(g(...args));
+      };
 }
 
 
@@ -47,7 +49,9 @@ function getComposition(f,g) {
  *
  */
 function getPowerFunction(exponent) {
-    throw new Error('Not implemented');
+    return function(arg) {
+        return Math.pow(arg,exponent);
+    };
 }
 
 
@@ -84,7 +88,24 @@ function getPolynom() {
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
 function memoize(func) {
-    throw new Error('Not implemented');
+    const generateKey = args => ( 
+        args.map(x => JSON.stringify(x) +     ':' + typeof(x)).join('|')
+    );
+    const cacheObj = {};
+  return (...args) => {
+    const key = generateKey(args); 
+    const val = cacheObj[key];
+    if (cacheObj[key]) {
+      if(cacheObj[key] == 'und') return undefined;
+    return val;}
+    const res = func(...args);
+    if(res == undefined) {
+      cacheObj[key] = 'und';
+      return res;
+    }
+    cacheObj[key] = res;
+    return res; 
+  };
 }
 
 
@@ -171,7 +192,10 @@ function partialUsingArguments(fn) {
  *   getId10() => 11
  */
 function getIdGeneratorFunction(startFrom) {
-    throw new Error('Not implemented');
+    var currentCount = startFrom;
+    return function() {
+        return currentCount++;
+    };
 }
 
 
